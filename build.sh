@@ -3,11 +3,35 @@
 # Exit on errors
 set -e
 
-version="13.1"
-pkgset="branches/2022Q1" # TODO: Use it
+# Determine the version of the running host system.
+# Building ISOs for other major versions than the running host system
+# is not supported and results in broken images anyway
+version=$(uname -r | cut -d "-" -f 1-2) # "12.2-RELEASE" or "13.0-CURRENT"
+
+if [ "${version}" = "13.0-CURRENT" ] ; then
+  # version="13.0-RC3"
+  version="13.0-RELEASE"
+fi
+
+VER=$(uname -r | cut -d "-" -f 1) # "12.2" or "13.0"
+MAJOR=$(uname -r | cut -d "." -f 1) # "12" or "13"
+
+# Download from either https://download.freebsd.org/ftp/releases/
+#                  or https://download.freebsd.org/ftp/snapshots/
+VERSIONSUFFIX=$(uname -r | cut -d "-" -f 2) # "RELEASE" or "CURRENT"
+FTPDIRECTORY="releases" # "releases" or "snapshots"
+if [ "${VERSIONSUFFIX}" = "CURRENT" ] ; then
+  FTPDIRECTORY="snapshots"
+fi
+# RCs are in the 'releases' ftp directory; hence check if $VERSIONSUFFIX begins with 'RC' https://serverfault.com/a/252406
+if [ "${VERSIONSUFFIX#RC}"x != "${VERSIONSUFFIX}x" ]  ; then
+  FTPDIRECTORY="releases"
+fi
+
+# pkgset="branches/2020Q1" # TODO: Use it
 desktop=$1
 tag=$2
-cwd=$(realpath | sed 's|/scripts||g')
+export cwd=$(realpath | sed 's|/scripts||g')
 workdir="/usr/local"
 livecd="${workdir}/furybsd"
 if [ -z "${arch}" ] ; then
@@ -15,19 +39,12 @@ if [ -z "${arch}" ] ; then
 fi
 cache="${livecd}/${arch}/cache"
 base="${cache}/${version}/base"
-packages="${cache}/packages"
+export packages="${cache}/packages"
 iso="${livecd}/iso"
-  if [ -n "$CIRRUS_CI" ] ; then
-    # On Cirrus CI ${livecd} is in tmpfs for speed reasons
-    # and tends to run out of space. Writing the final ISO
-    # to non-tmpfs should be an acceptable compromise
-    iso="${CIRRUS_WORKING_DIR}/artifacts"
-  fi
-uzip="${livecd}/uzip"
-cdroot="${livecd}/cdroot"
-ramdisk_root="${cdroot}/data/ramdisk"
+export uzip="${livecd}/uzip"
+export cdroot="${livecd}/cdroot"
 vol="furybsd"
-label="FURYBSD"
+label="LIVE"
 export DISTRIBUTIONS="kernel.txz base.txz"
 
 # Only run as superuser
