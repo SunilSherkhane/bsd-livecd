@@ -100,12 +100,14 @@ base()
   # TODO: Signature checking
   if [ ! -f "${base}/base.txz" ] ; then 
     cd ${base}
-    fetch https://download.freebsd.org/ftp/releases/${arch}/${version}-RELEASE/base.txz
+        #fetch https://download.freebsd.org/ftp/releases/${arch}/${version}-RELEASE/base.txz
+        fetch https://ci-01.nyi.hardenedbsd.org/pub/hardenedbsd/13-stable/amd64/amd64/build-644/base.txz
   fi
   
   if [ ! -f "${base}/kernel.txz" ] ; then
     cd ${base}
-    fetch https://download.freebsd.org/ftp/releases/${arch}/${version}-RELEASE/kernel.txz
+    #fetch https://download.freebsd.org/ftp/releases/${arch}/${version}-RELEASE/kernel.txz
+    fetch https://ci-01.nyi.hardenedbsd.org/pub/hardenedbsd/13-stable/amd64/amd64/build-644/kernel.txz
   fi
   cd ${base}
   tar -zxvf base.txz -C ${uzip}
