@@ -12,12 +12,10 @@ xf86-video-cirrus
 xf86-video-scfb
 xf86-video-vesa
 xf86-video-vmware
-xf86-video-qxl # !i386
 drm-kmod
-drm-legacy-kmod
 libva-intel-driver
 drm-kmod
-nvidia-driver # !i386
+nvidia-driver
 mesa-libs
 mesa-dri
 open-vm-tools
@@ -44,3 +42,13 @@ nss_mdns
 openntpd
 py37-qt5-widgets
 freedesktop-sound-theme
+zsh
+x11-drivers/xf86-video-amdgpu
+zsync
+wget
+bash
+zip 
+devel/py-xdg 
+devel/py-qt5-pyqt
+librsvg2 
+ca_root_nss
