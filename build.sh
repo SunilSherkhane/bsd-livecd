@@ -3,8 +3,8 @@
 # Exit on errors
 set -e
 
-version="12.1"
-pkgset="branches/2020Q1" # TODO: Use it
+version="13.1"
+pkgset="branches/2022Q1" # TODO: Use it
 desktop=$1
 tag=$2
 cwd=$(realpath | sed 's|/scripts||g')
